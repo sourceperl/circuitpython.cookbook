@@ -26,7 +26,8 @@ displayio.release_displays()
 # init display interface
 spi = SPI(clock=TFT_CLK, MOSI=TFT_DIN)
 display_bus = displayio.FourWire(spi, command=TFT_DC, chip_select=TFT_CS, reset=TFT_RST)
-display = ST7735R(display_bus, rotation=90, width=161, height=106, invert=True, backlight_pin=TFT_BL)
+display = ST7735R(display_bus, rotation=90, width=160, height=80, colstart=26, rowstart=1,
+                  invert=True, backlight_pin=TFT_BL)
 display.brightness = 0.75
 
 # make display context
@@ -36,11 +37,11 @@ display.show(main_group)
 # create a text label
 name_lbl = label.Label(terminalio.FONT, text='CPU temp', scale=2, color=0x008000)
 name_lbl.anchor_point = (.5, .5)
-name_lbl.anchored_position = (display.width//2, 20)
+name_lbl.anchored_position = (display.width//2, display.height//2 - 30)
 main_group.append(name_lbl)
 val_lbl = label.Label(terminalio.FONT, text='', scale=2, color=0x0000D0)
 val_lbl.anchor_point = (.5, .5)
-val_lbl.anchored_position = (display.width//2, 40)
+val_lbl.anchored_position = (display.width//2, display.height//2)
 main_group.append(val_lbl)
 
 # update value loop
