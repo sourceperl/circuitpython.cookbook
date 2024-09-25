@@ -11,7 +11,11 @@ import digitalio
 import neopixel
 
 
+# colors
+HOUSE_BGD = 0x040808
+
 # IO map
+
 PIEZO_PIN = board.GP22
 PIR_PIN = board.GP17
 STORM_PIX_PIN = board.GP26
@@ -21,6 +25,7 @@ FIRE_PIX_PIN = board.GP2
 # define async tasks
 # lighning animation
 async def lightning_anim_task():
+    storm_pix.fill(HOUSE_BGD)
     while True:
         if device_active:
             # lightning series with one or more flash
@@ -28,7 +33,7 @@ async def lightning_anim_task():
                 # lightning as LED flash
                 storm_pix.fill(0xffffff)
                 await asyncio.sleep_ms(10)
-                storm_pix.fill(0)
+                storm_pix.fill(HOUSE_BGD)
                 await asyncio.sleep_ms(random.randint(50, 400))
         # wait for next lightning series
         await asyncio.sleep_ms(random.randint(1_500, 5_000))
@@ -59,7 +64,7 @@ async def device_active_task():
         if pir_input.value:
             pir_trig_m = time.monotonic()
         device_active = time.monotonic() - pir_trig_m < 120
-        await asyncio.sleep_ms(1_000)
+        await asyncio.sleep_ms(500)
 
 
 # debug task
